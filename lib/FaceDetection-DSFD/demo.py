@@ -29,7 +29,7 @@ parser.add_argument('--save_folder', default='eval_tools/', type=str,
                     help='Dir to save results')
 parser.add_argument('--visual_threshold', default=0.1, type=float,
                     help='Final confidence threshold')
-parser.add_argument('--cuda', default=False, type=bool,
+parser.add_argument('--cuda', default=True, type=bool,
                     help='Use cuda to train model')
 parser.add_argument('--img_root', default='./data/worlds-largest-selfie.jpg', help='Location of test images directory')
 parser.add_argument('--widerface_root', default=WIDERFace_ROOT, help='Location of WIDERFACE root directory')
@@ -194,8 +194,8 @@ def test_oneimage():
     cfg = widerface_640
     num_classes = len(WIDERFace_CLASSES) + 1 # +1 background
     net = build_ssd('test', cfg['min_dim'], num_classes) # initialize SSD
-    net.load_state_dict(torch.load(args.trained_model, map_location=torch.device('cpu')))
-    # net.cuda()
+    net.load_state_dict(torch.load(args.trained_model))
+    net.cuda()
     net.eval()
     print('Finished loading model!')
 
@@ -245,5 +245,4 @@ def test_oneimage():
 
 
 if __name__ == '__main__':
-    import pdb; pdb.set_trace()
     test_oneimage()
